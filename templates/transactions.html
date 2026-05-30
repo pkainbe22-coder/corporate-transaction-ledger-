@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+
+{% block title %}Transactions - Corporate Ledger{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1>📋 Transactions</h1>
+    </div>
+    <div class="col-md-4 text-end">
+        <a href="{{ url_for('add_transaction') }}" class="btn btn-primary">➕ Add Transaction</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-header">
+        <h5 class="mb-0">All Transactions (Total: {{ total }})</h5>
+    </div>
+    <div class="card-body">
+        {% if transactions %}
+            <div class="table-responsive">
+                <table class="table table-hover table-striped">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Transaction ID</th>
+                            <th>From Account</th>
+                            <th>To Receiver</th>
+                            <th>Amount</th>
+                            <th>Status</th>
+                            <th>Inserted By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for txn in transactions %}
+                        <tr>
+                            <td>{{ txn.date }}</td>
+                            <td><code>{{ txn.transaction_id }}</code></td>
+                            <td>{{ txn.from_account }}</td>
+                            <td>{{ txn.to_receiver_code }}</td>
+                            <td>₹ {{ "%.2f"|format(txn.amount) }}</td>
+                            <td>
+                                <span class="badge bg-{{ 'success' if txn.transaction_status == 'success' else 'danger' if txn.transaction_status == 'failed' else 'warning' }}">
+                                    {{ txn.transaction_status.title() }}
+                                </span>
+                            </td>
+                            <td>{{ txn.inserted_by }}</td>
+                            <td>
+                                <a href="{{ url_for('view_transaction', txn_id=txn.id) }}" class="btn btn-sm btn-primary">View</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Pagination -->
+            {% if total_pages > 1 %}
+            <nav aria-label="Page navigation" class="mt-4">
+                <ul class="pagination justify-content-center">
+                    {% if page > 1 %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page=1">First</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page - 1 }}">Previous</a>
+                        </li>
+                    {% endif %}
+
+                    {% for p in range(1, total_pages + 1) %}
+                        {% if p == page %}
+                            <li class="page-item active"><span class="page-link">{{ p }}</span></li>
+                        {% else %}
+                            <li class="page-item"><a class="page-link" href="?page={{ p }}">{{ p }}</a></li>
+                        {% endif %}
+                    {% endfor %}
+
+                    {% if page < total_pages %}
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ page + 1 }}">Next</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" href="?page={{ total_pages }}">Last</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </nav>
+            {% endif %}
+        {% else %}
+            <p class="text-muted text-center py-5">No transactions found. <a href="{{ url_for('add_transaction') }}">Add your first transaction!</a></p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

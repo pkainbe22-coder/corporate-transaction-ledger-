@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+
+{% block title %}Add Transaction - Corporate Ledger{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1>➕ Add Transaction</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">Transaction Details</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="date" class="form-label">Date *</label>
+                                <input type="date" class="form-control" id="date" name="date" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="transaction_id" class="form-label">Transaction ID *</label>
+                                <input type="text" class="form-control" id="transaction_id" name="transaction_id" placeholder="e.g., TXN20260530001" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="from_account" class="form-label">From Account *</label>
+                                <input type="text" class="form-control" id="from_account" name="from_account" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="to_receiver_code" class="form-label">To Receiver Code *</label>
+                                <input type="text" class="form-control" id="to_receiver_code" name="to_receiver_code" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="amount" class="form-label">Amount (₹) *</label>
+                                <input type="number" class="form-control" id="amount" name="amount" step="0.01" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="budgetary_amount" class="form-label">Budgetary Amount (₹)</label>
+                                <input type="number" class="form-control" id="budgetary_amount" name="budgetary_amount" step="0.01">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="ifsc_code" class="form-label">IFSC Code</label>
+                                <input type="text" class="form-control" id="ifsc_code" name="ifsc_code" placeholder="e.g., HDFC0000001">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="transaction_status" class="form-label">Status *</label>
+                                <select class="form-control" id="transaction_status" name="transaction_status" required>
+                                    <option value="pending">Pending</option>
+                                    <option value="success">Successful</option>
+                                    <option value="failed">Failed</option>
+                                    <option value="cancelled">Cancelled</option>
+                                    <option value="on_hold">On Hold</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="marks" class="form-label">Marks/Notes</label>
+                        <textarea class="form-control" id="marks" name="marks" rows="3"></textarea>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('transactions') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Add Transaction</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card bg-light">
+            <div class="card-header">
+                <h5 class="mb-0">ℹ️ Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Transaction ID:</strong> Must be unique and 5-20 alphanumeric characters.</p>
+                <p><strong>Amount:</strong> Maximum allowed amount is ₹999,999,999.99</p>
+                <p><strong>Blockchain:</strong> Every transaction is protected with SHA-256 hashing.</p>
+                <p><strong>Immutable:</strong> Once added, transactions cannot be modified or deleted.</p>
+                <div class="alert alert-info mt-3">
+                    <small>All fields marked with * are required.</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

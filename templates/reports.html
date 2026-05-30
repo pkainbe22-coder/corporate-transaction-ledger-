@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Reports - Corporate Ledger{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h1>📊 Reports & Analytics</h1>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Generate Report</h5>
+                <form method="GET">
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Report Type</label>
+                        <select class="form-control" id="type" name="type">
+                            <option value="summary">Summary</option>
+                            <option value="detail">Detailed</option>
+                            <option value="status">By Status</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="start_date" class="form-label">Start Date</label>
+                        <input type="date" class="form-control" id="start_date" name="start_date">
+                    </div>
+                    <div class="mb-3">
+                        <label for="end_date" class="form-label">End Date</label>
+                        <input type="date" class="form-control" id="end_date" name="end_date">
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Generate</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        {% if report %}
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h5 class="mb-0">{{ report.type.title() }} Report</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Generated At:</strong> {{ report.generated_at }}</p>
+                        <p><strong>Total Transactions:</strong> {{ report.total_transactions }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Total Amount:</strong> ₹ {{ "%.2f"|format(report.total_amount) }}</p>
+                        <p><strong>Successful:</strong> {{ report.successful_count }} | <strong>Failed:</strong> {{ report.failed_count }}</p>
+                    </div>
+                </div>
+
+                {% if report.by_status %}
+                <hr>
+                <h6>Status Breakdown:</h6>
+                <div class="row">
+                    {% for status, count in report.by_status.items() %}
+                    <div class="col-md-3">
+                        <div class="card bg-light">
+                            <div class="card-body text-center">
+                                <p class="mb-0 text-muted">{{ status.title() }}</p>
+                                <h4>{{ count }}</h4>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
